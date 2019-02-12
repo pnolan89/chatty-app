@@ -7,7 +7,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [
         {
           id: 1,
@@ -18,9 +18,14 @@ class App extends Component {
           id: 2,
           username: "Anonymous",
           content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
+        },
+        {
+          id: 3,
+          username: "Michelle",
+          content: "Hello there!"
         }
       ],
-      newMessageKey: 3
+      newMessageKey: 4
     };
     this.addNewMessage = this.addNewMessage.bind(this);
   }
@@ -34,13 +39,6 @@ class App extends Component {
     });
   }
 
-  componentDidMount() {
-    console.log("componentDidMount <App />");
-    setTimeout(() => {
-      console.log("Simulating incoming message");
-      this.addNewMessage(this.state.newMessageKey, "Michelle", "Hello there!");
-    }, 3000);
-  }
 
   render() {
     return (

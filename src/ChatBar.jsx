@@ -7,13 +7,14 @@ const ChatBar = (props) => {
     let username = event.target.username.value;
     let content = event.target.content.value;
     props.addNewMessage(id, username, content);
+    event.target.content.value = "";
   };
   return (
   <form onSubmit={onSubmit}>
     <footer className="chatbar">
         <input name="username" className="chatbar-username" defaultValue={props.currentUser} />
         <input name="content" className="chatbar-message" placeholder="Type a message and hit ENTER" />
-        <input type="submit" />
+        <input id="newMessageSubmit" type="submit" />
     </footer>
   </form>
   );
