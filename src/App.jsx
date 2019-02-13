@@ -25,8 +25,16 @@ class App extends Component {
   }
 
   componentDidMount() {
+    let addNewMessage = this.addNewMessage;
     this.socket.onopen = function (event) {
       console.log('Connected to server!');
+    };
+    this.socket.onmessage = (event) => {
+      let messages = this.state.messages.concat(JSON.parse(event.data));
+      this.setState({
+        messages: messages,
+        newMessageKey: this.state.newMessageKey + 1
+      });
     };
   }
 
