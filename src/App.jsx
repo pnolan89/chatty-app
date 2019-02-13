@@ -13,6 +13,7 @@ class App extends Component {
     };
     this.socket = new WebSocket("ws://localhost:3001");
     this.addNewMessage = this.addNewMessage.bind(this);
+    this.changeCurrentUser = this.changeCurrentUser.bind(this);
   }
 
   addNewMessage(message) {
@@ -21,6 +22,12 @@ class App extends Component {
     this.setState({
       messages: messages,
       newMessageKey: this.state.newMessageKey + 1
+    });
+  }
+
+  changeCurrentUser(username) {
+    this.setState({
+      currentUser: {name: username}
     });
   }
 
@@ -38,7 +45,6 @@ class App extends Component {
     };
   }
 
-
   render() {
     return (
     <div>
@@ -46,7 +52,7 @@ class App extends Component {
       <a href="/" className="navbar-brand">Chatty</a>
     </nav>
     <MessageList messages={this.state.messages}/>
-    <ChatBar currentUser={this.state.currentUser.name} addNewMessage={this.addNewMessage} newMessageKey={this.state.newMessageKey}/>
+    <ChatBar currentUser={this.state.currentUser.name} addNewMessage={this.addNewMessage} changeCurrentUser={this.changeCurrentUser} newMessageKey={this.state.newMessageKey}/>
     </div>
     );
   }

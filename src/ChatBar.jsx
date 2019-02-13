@@ -1,23 +1,31 @@
 import React, {Component} from 'react';
 
 const ChatBar = (props) => {
-  const onSubmit = (event) => {
-    event.preventDefault();
-    let id = props.newMessageKey;
-    let username = event.target.username.value;
-    let content = event.target.content.value;
-    const newMessage = {id: id, username: username, content: content}
-    props.addNewMessage(newMessage);
-    event.target.content.value = "";
+  const messageSubmit = (event) => {
+    if (event.key == 'Enter') {
+      event.preventDefault();
+      let id = props.newMessageKey;
+      let username = props.currentUser;
+      let content = event.target.value;
+      const newMessage = {id: id, username: username, content: content}
+      props.addNewMessage(newMessage);
+      event.target.value = "";
+    }
   };
+
+const usernameSubmit = (event) => {
+  if (event.key == 'Enter') {
+    event.preventDefault();
+    let name = event.target.value;
+    props.changeCurrentUser(name);
+  }
+}
+
   return (
-  <form onSubmit={onSubmit}>
-    <footer className="chatbar">
-        <input name="username" className="chatbar-username" defaultValue={props.currentUser} />
-        <input name="content" className="chatbar-message" placeholder="Type a message and hit ENTER" />
-        <input id="newMessageSubmit" type="submit" />
-    </footer>
-  </form>
+  <footer className="chatbar">
+      <input onKeyPress={usernameSubmit} name="username" className="chatbar-username" defaultValue={props.currentUser} />
+      <input onKeyPress={messageSubmit} name="content" className="chatbar-message" placeholder="Type a message and hit ENTER" />
+  </footer>
   );
 }
 
