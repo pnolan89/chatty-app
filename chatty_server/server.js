@@ -25,7 +25,7 @@ wss.on('connection', (ws) => {
     newMessage.id = uuidv4();
     let newMessageString = JSON.stringify(newMessage);
     wss.clients.forEach(function each(client) {
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
+      if (client.readyState === WebSocket.OPEN) {
         console.log('Websocket OPEN: ', WebSocket.OPEN);
         console.log('Ready state: ', client.readyState);
         console.log('Message sent to client: ', newMessageString);
