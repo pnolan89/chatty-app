@@ -8,34 +8,16 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
-      messages: [
-        {
-          id: 1,
-          username: "Bob",
-          content: "Has anyone seen my marbles?",
-        },
-        {
-          id: 2,
-          username: "Anonymous",
-          content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-        },
-        {
-          id: 3,
-          username: "Michelle",
-          content: "Hello there!"
-        }
-      ],
-      newMessageKey: 4
+      messages: [],
+      newMessageKey: 1
     };
     this.socket = new WebSocket("ws://localhost:3001");
     this.addNewMessage = this.addNewMessage.bind(this);
   }
 
-  addNewMessage(id, username, content) {
-    const newMessage = {id: id, username: username, content: content};
-    const messages = this.state.messages.concat(newMessage);
-    console.log("test message ",messages);
-    this.socket.send(`User ${username} said ${content}`);
+  addNewMessage(message) {
+    const messages = this.state.messages.concat(message);
+    this.socket.send(`User ${message.username} said ${message.content}`);
     this.setState({
       messages: messages,
       newMessageKey: this.state.newMessageKey + 1
