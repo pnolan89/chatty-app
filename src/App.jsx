@@ -27,16 +27,25 @@ class App extends Component {
       ],
       newMessageKey: 4
     };
+    this.socket = new WebSocket("ws://localhost:3001");
     this.addNewMessage = this.addNewMessage.bind(this);
   }
 
   addNewMessage(id, username, content) {
     const newMessage = {id: id, username: username, content: content};
     const messages = this.state.messages.concat(newMessage);
+    console.log("test message ",messages);
+    this.socket.send(`User ${username} said ${content}`);
     this.setState({
       messages: messages,
       newMessageKey: this.state.newMessageKey + 1
     });
+  }
+
+  componentDidMount() {
+    this.socket.onopen = function (event) {
+      console.log('Connected to server!');
+    };
   }
 
 
