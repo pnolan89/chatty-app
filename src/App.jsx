@@ -17,7 +17,7 @@ class App extends Component {
 
   addNewMessage(message) {
     const messages = this.state.messages.concat(message);
-    this.socket.send(`User ${message.username} said ${message.content}`);
+    this.socket.send(JSON.stringify(message));
     this.setState({
       messages: messages,
       newMessageKey: this.state.newMessageKey + 1
