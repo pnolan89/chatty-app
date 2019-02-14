@@ -97,6 +97,14 @@ body {
 
 .message-content {
   flex: 8;
+
+  p {
+    margin-top: 0;
+  }
+
+  img {
+    max-width: 60%;
+  }
 }
 
 .message-username {

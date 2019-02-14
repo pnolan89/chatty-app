@@ -30,10 +30,28 @@ wss.on('connection', (ws) => {
   });
 
   ws.on('message', (data) => {
+    const checkImgURL = /\.jpg|\.png|\.gif/i;
     let newMessage = JSON.parse(data);
     newMessage.id = uuidv4();
     if (newMessage.type === "postMessage") {
+      if (checkImgURL.test(newMessage.content)) {
+        newMessage.type = "incomingImage";
+        let contentArray = newMessage.content.split(' ');
+        let imgArray = [];
+        let txtArray = [];
+        contentArray.forEach(function(word, index, array) {
+          if (checkImgURL.test(word)) {
+            imgArray.push(word);
+          } else {
+            txtArray.push(word);
+          }
+        });
+        newMessage.content = txtArray.join(' ');
+        // console.log('content: ', newMessage.content);
+        newMessage.images = imgArray;
+      } else {
       newMessage.type = "incomingMessage";
+      }
     } else if (newMessage.type === "postNotification") {
       newMessage.type = "incomingNotification";
     }

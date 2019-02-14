@@ -21,7 +21,6 @@ class App extends Component {
   }
 
   addNewMessage(message) {
-    const messages = this.state.messages.concat(message);
     this.socket.send(JSON.stringify(message));
   }
 
@@ -37,6 +36,10 @@ class App extends Component {
       }
     });
     this.socket.send(JSON.stringify(notification));
+  }
+
+  scrollToBottom() {
+    this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   }
 
   componentDidMount() {
@@ -58,6 +61,11 @@ class App extends Component {
         });
       }
     };
+    this.scrollToBottom();
+  }
+
+  componentDidUpdate() {
+    this.scrollToBottom();
   }
 
   render() {
@@ -68,6 +76,9 @@ class App extends Component {
       <span className="users-online">{this.state.clientCount} user(s) online</span>
     </nav>
     <MessageList messages={this.state.messages}/>
+    <div style={{float: "left", clear: "both"}}
+      ref={(el) => { this.messagesEnd = el; }}>
+    </div>
     <ChatBar currentUser={this.state.currentUser} addNewMessage={this.addNewMessage} changeCurrentUser={this.changeCurrentUser}/>
     </div>
     );
