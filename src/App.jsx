@@ -6,8 +6,12 @@ import MessageList from './MessageList.jsx';
 class App extends Component {
   constructor(props) {
     super(props);
+    const colors = ["red", "yellow", "green", "blue", "orange", "purple", "pink"];
     this.state = {
-      currentUser: {name: "Anonymous"},
+      currentUser: {
+        name: "Anonymous",
+        color: colors[Math.floor(Math.random() * colors.length)]
+      },
       messages: [],
       clientCount: 0
     };
@@ -27,7 +31,10 @@ class App extends Component {
       content: `${this.state.currentUser.name} has changed their name to ${newName}`
     };
     this.setState({
-      currentUser: {name: newName}
+      currentUser: {
+        name: newName,
+        color: this.state.currentUser.color
+      }
     });
     this.socket.send(JSON.stringify(notification));
   }
@@ -61,7 +68,7 @@ class App extends Component {
       <span className="users-online">{this.state.clientCount} user(s) online</span>
     </nav>
     <MessageList messages={this.state.messages}/>
-    <ChatBar currentUser={this.state.currentUser.name} addNewMessage={this.addNewMessage} changeCurrentUser={this.changeCurrentUser}/>
+    <ChatBar currentUser={this.state.currentUser} addNewMessage={this.addNewMessage} changeCurrentUser={this.changeCurrentUser}/>
     </div>
     );
   }

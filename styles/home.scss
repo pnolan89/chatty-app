@@ -13,6 +13,34 @@ body {
   display: none;
 }
 
+.red {
+  color: red;
+}
+
+.yellow {
+  color: #ffda00;
+}
+
+.green {
+  color: green;
+}
+
+.blue {
+  color: blue;
+}
+
+.orange {
+  color: orange;
+}
+
+.purple {
+  color: purple;
+}
+
+.pink {
+  color: pink;
+}
+
 .users-online {
   float: right;
   margin-right: 10px;
@@ -40,6 +68,7 @@ body {
   margin: 5px;
   padding: 0 9px;
 }
+
 
 .chatbar-message {
   flex: 8;

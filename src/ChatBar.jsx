@@ -5,9 +5,9 @@ const ChatBar = (props) => {
     if (event.key == 'Enter') {
       event.preventDefault();
       let id = props.newMessageKey;
-      let username = props.currentUser;
+      let user = props.currentUser;
       let content = event.target.value;
-      const newMessage = {type: "postMessage", username: username, content: content};
+      const newMessage = {type: "postMessage", username: user.name, color: user.color, content: content};
       props.addNewMessage(newMessage);
       event.target.value = "";
     }
@@ -23,7 +23,7 @@ const usernameSubmit = (event) => {
 
   return (
   <footer className="chatbar">
-      <input onKeyPress={usernameSubmit} name="username" className="chatbar-username" defaultValue={props.currentUser} />
+      <input onKeyPress={usernameSubmit} name="username" className="chatbar-username" defaultValue={props.currentUser.name} />
       <input onKeyPress={messageSubmit} name="content" className="chatbar-message" placeholder="Type a message and hit ENTER" />
   </footer>
   );
