@@ -7,7 +7,7 @@ const ChatBar = (props) => {
       let id = props.newMessageKey;
       let username = props.currentUser;
       let content = event.target.value;
-      const newMessage = {type: "postMessage", username: username, content: content}
+      const newMessage = {type: "postMessage", username: username, content: content};
       props.addNewMessage(newMessage);
       event.target.value = "";
     }
@@ -19,7 +19,7 @@ const usernameSubmit = (event) => {
     let name = event.target.value;
     props.changeCurrentUser(name);
   }
-}
+};
 
   return (
   <footer className="chatbar">

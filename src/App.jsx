@@ -39,10 +39,14 @@ class App extends Component {
     };
     this.socket.onmessage = (event) => {
       let message = JSON.parse(event.data);
-      if (message.type === 'clientCount') {
-        console.log('Received count');
+      if (message.type === 'clientConnect') {
         this.setState({
           clientCount: message.count
+        });
+      } else if (message.type === 'clientDisconnect') {
+        let currentClients = (this.state.clientCount - 1);
+        this.setState({
+          clientCount: currentClients
         });
       } else {
         let messages = this.state.messages.concat(message);
