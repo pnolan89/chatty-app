@@ -7,8 +7,9 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: {name: "Anonymous"},
       messages: [],
+      clientCount: 0
     };
     this.socket = new WebSocket("ws://localhost:3001");
     this.addNewMessage = this.addNewMessage.bind(this);
@@ -20,10 +21,15 @@ class App extends Component {
     this.socket.send(JSON.stringify(message));
   }
 
-  changeCurrentUser(username) {
+  changeCurrentUser(newName) {
+    let notification = {
+      type: "postNotification",
+      content: `${this.state.currentUser.name} has changed their name to ${newName}`
+    };
     this.setState({
-      currentUser: {name: username}
+      currentUser: {name: newName}
     });
+    this.socket.send(JSON.stringify(notification));
   }
 
   componentDidMount() {
@@ -32,10 +38,18 @@ class App extends Component {
       console.log('Connected to server!');
     };
     this.socket.onmessage = (event) => {
-      let messages = this.state.messages.concat(JSON.parse(event.data));
-      this.setState({
-        messages: messages,
-      });
+      let message = JSON.parse(event.data);
+      if (message.type === 'clientCount') {
+        console.log('Received count');
+        this.setState({
+          clientCount: message.count
+        });
+      } else {
+        let messages = this.state.messages.concat(message);
+        this.setState({
+          messages: messages,
+        });
+      }
     };
   }
 
@@ -44,6 +58,7 @@ class App extends Component {
     <div>
     <nav className="navbar">
       <a href="/" className="navbar-brand">Chatty</a>
+      <span className="users-online">{this.state.clientCount} user(s) online</span>
     </nav>
     <MessageList messages={this.state.messages}/>
     <ChatBar currentUser={this.state.currentUser.name} addNewMessage={this.addNewMessage} changeCurrentUser={this.changeCurrentUser} newMessageKey={this.state.newMessageKey}/>

@@ -7,7 +7,7 @@ const ChatBar = (props) => {
       let id = props.newMessageKey;
       let username = props.currentUser;
       let content = event.target.value;
-      const newMessage = {username: username, content: content}
+      const newMessage = {type: "postMessage", username: username, content: content}
       props.addNewMessage(newMessage);
       event.target.value = "";
     }
