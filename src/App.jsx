@@ -33,10 +33,6 @@ class App extends Component {
   }
 
   componentDidMount() {
-    let addNewMessage = this.addNewMessage;
-    this.socket.onopen = function (event) {
-      console.log('Connected to server!');
-    };
     this.socket.onmessage = (event) => {
       let message = JSON.parse(event.data);
       if (message.type === 'clientConnect') {
@@ -65,7 +61,7 @@ class App extends Component {
       <span className="users-online">{this.state.clientCount} user(s) online</span>
     </nav>
     <MessageList messages={this.state.messages}/>
-    <ChatBar currentUser={this.state.currentUser.name} addNewMessage={this.addNewMessage} changeCurrentUser={this.changeCurrentUser} newMessageKey={this.state.newMessageKey}/>
+    <ChatBar currentUser={this.state.currentUser.name} addNewMessage={this.addNewMessage} changeCurrentUser={this.changeCurrentUser}/>
     </div>
     );
   }
