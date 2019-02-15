@@ -50,10 +50,10 @@ wss.on('connection', (ws) => {
     // For postMessage requests
     if (newMessage.type === "postMessage") {
       let contentArray = newMessage.content.split(' ');
-      // Check if post contains gif command
+      // If post contains /gif command...
       if (contentArray[0] === '/gif') {
+        // Make a request to Gify API
         newMessage.sync = false;
-        console.log('message type: ', newMessage.type);
         newMessage.content = contentArray.splice(1).join(' ');
         const requestOptions = {
           url: `http://api.giphy.com/v1/gifs/search?api_key=${process.env.API_KEY}&q=${newMessage.content}`,
@@ -61,20 +61,24 @@ wss.on('connection', (ws) => {
         };
         request(requestOptions, (error, response, gifData) => {
           if (error) {
-            newMessage.content = error;
-          } else {
+            console.log(error);
+          } else if (gifData.data[0]) {
             newMessage.image = gifData.data[0].images.original.url;
+            newMessage.type = "incomingGify";
+            let newMessageString = JSON.stringify(newMessage);
+            // Separate broadcast function for async request
+            wss.clients.forEach(function each(client) {
+              if (client.readyState === WebSocket.OPEN) {
+                client.send(newMessageString);
+              }
+            });
           }
-          newMessage.type = "incomingGify";
-          let newMessageString = JSON.stringify(newMessage);
-          wss.clients.forEach(function each(client) {
-            if (client.readyState === WebSocket.OPEN) {
-              client.send(newMessageString);
-            }
-          });
+          // else {
+          //   console.log('Not found');
+          // }
         });
       }
-      // Check if post contains image urls (case-insensitive)
+      // If not /gif command, check if post contains image urls
       const checkImgURL = /\.jpg|\.png|\.gif/i;
       if (checkImgURL.test(newMessage.content)) {
         // If it does, create an incomingImage message for client
@@ -93,8 +97,8 @@ wss.on('connection', (ws) => {
         });
         newMessage.content = txtArray.join(' ');
         newMessage.images = imgArray;
-      } else {
       // Otherwise, create an incomingMessage message for client
+      } else {
       newMessage.type = "incomingMessage";
       }
     // For postNotification requests
@@ -102,9 +106,9 @@ wss.on('connection', (ws) => {
       // Create an incomingNotification message for client
       newMessage.type = "incomingNotification";
     }
+    // Broadcast the message to all clients (synchronous requests only)
     if (newMessage.sync) {
       let newMessageString = JSON.stringify(newMessage);
-      // Broadcast the message to all clients
       wss.clients.forEach(function each(client) {
         if (client.readyState === WebSocket.OPEN) {
           client.send(newMessageString);
