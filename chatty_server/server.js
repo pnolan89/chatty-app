@@ -19,14 +19,25 @@ const wss = new SocketServer({ server });
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
   console.log('Client connected');
-  // Send clientConnect message to client. For updating the "users connected" count
+  // Create clientConnect message. For updating the "users connected" count
   let clientConnect = {
     type: "clientConnect",
     count: wss.clients.size,
     id: uuidv4()
   };
+  // Create clientColor message. For assigning a random color to new client for username display
+  const colors = ["red", "yellow", "green", "blue", "orange", "purple", "pink"];
+  let clientColor = {
+    type: "clientColor",
+    color: colors[Math.floor(Math.random() * colors.length)],
+    id: uuidv4()
+  };
+  // Send clientConnect to all clients, and clientColor only to new client
   wss.clients.forEach(function each(client) {
     client.send(JSON.stringify(clientConnect));
+    if (client === ws) {
+      client.send(JSON.stringify(clientColor));
+    }
   });
 
   // Handles data coming from clients
@@ -35,7 +46,7 @@ wss.on('connection', (ws) => {
     newMessage.id = uuidv4();
     // For postMessage requests
     if (newMessage.type === "postMessage") {
-      // Check if post contains image urls
+      // Check if post contains image urls (case-insensitive)
       const checkImgURL = /\.jpg|\.png|\.gif/i;
       if (checkImgURL.test(newMessage.content)) {
         // If it does, create an incomingImage message for client

@@ -6,13 +6,8 @@ import MessageList from './MessageList.jsx';
 class App extends Component {
   constructor(props) {
     super(props);
-    const colors = ["red", "yellow", "green", "blue", "orange", "purple", "pink"];
     this.state = {
-      currentUser: {
-        name: "Anonymous",
-        // Select random color from colors array for username display
-        color: colors[Math.floor(Math.random() * colors.length)]
-      },
+      currentUser: {name: "Anonymous"},
       messages: [],
       clientCount: 0
     };
@@ -63,6 +58,13 @@ class App extends Component {
           clientCount: currentClients
         });
       // New message or notification, update message list
+      } else if (message.type === 'clientColor') {
+        this.setState({
+          currentUser: {
+            name: this.state.currentUser.name,
+            color: message.color
+          }
+        });
       } else {
         let messages = this.state.messages.concat(message);
         this.setState({
