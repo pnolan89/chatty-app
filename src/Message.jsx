@@ -17,13 +17,15 @@ const Message = (props) => {
       </div>
     );
   } else if (type === 'incomingImage') {
-    console.log(props.message.content);
+    let images = props.message.images.map((image) =>
+      <img src={image}/>
+    )
     return (
       <div className="message">
         <div className={userClass}>{props.message.username}</div>
         <div className="message-content">
           <p>{props.message.content}</p>
-          <img src={props.message.images[0]}/>
+          {images}
         </div>
       </div>
     )

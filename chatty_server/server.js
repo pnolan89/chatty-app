@@ -3,7 +3,6 @@ const WebSocket = require('ws');
 const SocketServer = WebSocket.Server;
 const uuidv4 = require('uuid/v4');
 
-// Set the port to 3001
 const PORT = 3001;
 
 // Create a new express server
@@ -15,11 +14,12 @@ const server = express()
 // Create the WebSockets server
 const wss = new SocketServer({ server });
 
-// Set up a callback that will run when a client connects to the server
+// Callback that runs when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
   console.log('Client connected');
+  // Send clientConnect message to client. For updating the "users connected" count
   let clientConnect = {
     type: "clientConnect",
     count: wss.clients.size,
@@ -29,12 +29,16 @@ wss.on('connection', (ws) => {
     client.send(JSON.stringify(clientConnect));
   });
 
+  // Handles data coming from clients
   ws.on('message', (data) => {
-    const checkImgURL = /\.jpg|\.png|\.gif/i;
     let newMessage = JSON.parse(data);
     newMessage.id = uuidv4();
+    // For postMessage requests
     if (newMessage.type === "postMessage") {
+      // Check if post contains image urls
+      const checkImgURL = /\.jpg|\.png|\.gif/i;
       if (checkImgURL.test(newMessage.content)) {
+        // If it does, create an incomingImage message for client
         newMessage.type = "incomingImage";
         let contentArray = newMessage.content.split(' ');
         let imgArray = [];
@@ -47,15 +51,18 @@ wss.on('connection', (ws) => {
           }
         });
         newMessage.content = txtArray.join(' ');
-        // console.log('content: ', newMessage.content);
         newMessage.images = imgArray;
       } else {
+      // Otherwise, create an incomingMessage message for client
       newMessage.type = "incomingMessage";
       }
+    // For postNotification requests
     } else if (newMessage.type === "postNotification") {
+      // Create an incomingNotification message for client
       newMessage.type = "incomingNotification";
     }
     let newMessageString = JSON.stringify(newMessage);
+    // Broadcast the message to all clients
     wss.clients.forEach(function each(client) {
       if (client.readyState === WebSocket.OPEN) {
         client.send(newMessageString);
@@ -65,6 +72,7 @@ wss.on('connection', (ws) => {
 
   ws.on('close', () => {
     console.log('Client disconnected');
+    // Send clientDisconnect message to client, to update "users connected" count
     let clientDisconnect = {type: "clientDisconnect", id: uuidv4()};
     wss.clients.forEach(function each(client) {
       client.send(JSON.stringify(clientDisconnect));
