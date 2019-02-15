@@ -46,31 +46,57 @@ class App extends Component {
     // Handle incoming messages from server
     this.socket.onmessage = (event) => {
       let message = JSON.parse(event.data);
-      // Client connected, update count
-      if (message.type === 'clientConnect') {
-        this.setState({
-          clientCount: message.count
-        });
-      // Client disconnected, update count
-      } else if (message.type === 'clientDisconnect') {
-        let currentClients = (this.state.clientCount - 1);
-        this.setState({
-          clientCount: currentClients
-        });
-      // New message or notification, update message list
-      } else if (message.type === 'clientColor') {
-        this.setState({
-          currentUser: {
-            name: this.state.currentUser.name,
-            color: message.color
-          }
-        });
-      } else {
-        let messages = this.state.messages.concat(message);
-        this.setState({
-          messages: messages,
-        });
+      switch(message.type) {
+        case 'clientConnect':
+          // Client connected, update count
+          this.setState({
+            clientCount: message.count
+          });
+          break;
+        case 'clientDisconnect':
+          // Client disconnected, update count
+          this.setState({
+            clientCount: this.state.clientCount - 1
+          });
+          break;
+        case 'clientColor':
+          // Client color changed. Update color
+          this.setState({
+            currentUser: {
+              name: this.state.currentUser.name,
+              color: message.color
+            }
+          });
+          break;
+        default:
+          // New message or notification, update message list
+          let messages = this.state.messages.concat(message);
+          this.setState({
+            messages: messages,
+          });
       }
+
+      // if (message.type === 'clientConnect') {
+      //   this.setState({
+      //     clientCount: message.count
+      //   });
+      // } else if (message.type === 'clientDisconnect') {
+      //   this.setState({
+      //     clientCount: this.state.clientCount - 1
+      //   });
+      // } else if (message.type === 'clientColor') {
+      //   this.setState({
+      //     currentUser: {
+      //       name: this.state.currentUser.name,
+      //       color: message.color
+      //     }
+      //   });
+      // } else {
+      //   let messages = this.state.messages.concat(message);
+      //   this.setState({
+      //     messages: messages,
+      //   });
+      // }
     };
     this.scrollToBottom();
   }

@@ -18,7 +18,7 @@ const Message = (props) => {
     );
   } else if (type === 'incomingImage') {
     let images = props.message.images.map((image) =>
-      <img src={image}/>
+      <img src={image.url} key={image.id}/>
     )
     return (
       <div className="message">

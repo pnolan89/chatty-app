@@ -54,9 +54,12 @@ wss.on('connection', (ws) => {
         let contentArray = newMessage.content.split(' ');
         let imgArray = [];
         let txtArray = [];
-        contentArray.forEach(function(word, index, array) {
+        contentArray.forEach(function(word) {
           if (checkImgURL.test(word)) {
-            imgArray.push(word);
+            imgArray.push({
+              url: word,
+              id: uuidv4()
+            });
           } else {
             txtArray.push(word);
           }
