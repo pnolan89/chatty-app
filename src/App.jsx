@@ -79,10 +79,6 @@ class App extends Component {
     };
   }
 
-  // componentDidUpdate() {
-  //   this.scrollToBottom();
-  // }
-
   // 'messagesEnd' div and 'scrollToBottom' method inspired by metakermit on Stack Overflow:
   // (https://stackoverflow.com/questions/37620694/)
   render() {
