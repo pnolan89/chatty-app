@@ -2,6 +2,7 @@ const express = require('express');
 const WebSocket = require('ws');
 const SocketServer = WebSocket.Server;
 const uuidv4 = require('uuid/v4');
+const dotenv = require('dotenv').config();
 
 const PORT = 3001;
 
@@ -46,12 +47,18 @@ wss.on('connection', (ws) => {
     newMessage.id = uuidv4();
     // For postMessage requests
     if (newMessage.type === "postMessage") {
+      let contentArray = newMessage.content.split(' ');
+      // Check if post contains gif command
+      if (contentArray[0] === '/gif') {
+        newMessage.type = "incomingImage";
+        let text = contentArray.splice(1).join(' ');
+
+      }
       // Check if post contains image urls (case-insensitive)
       const checkImgURL = /\.jpg|\.png|\.gif/i;
       if (checkImgURL.test(newMessage.content)) {
         // If it does, create an incomingImage message for client
         newMessage.type = "incomingImage";
-        let contentArray = newMessage.content.split(' ');
         let imgArray = [];
         let txtArray = [];
         contentArray.forEach(function(word) {
