@@ -31,6 +31,15 @@ const Message = (props) => {
         </div>
       </div>
     )
+  } else if (type === 'incomingGify') {
+    return (
+      <div className="message">
+        <div className={userClass}>{message.username}</div>
+        <div className="message-content">
+          <img src={message.image}/>
+        </div>
+      </div>
+    )
   }
 }
 

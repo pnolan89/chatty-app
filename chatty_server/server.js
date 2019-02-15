@@ -63,13 +63,9 @@ wss.on('connection', (ws) => {
           if (error) {
             newMessage.content = error;
           } else {
-            newMessage.images = [{
-              url: gifData.data[0].images.original.url,
-              id: uuidv4()
-            }];
+            newMessage.image = gifData.data[0].images.original.url;
           }
-          newMessage.type = "incomingImage";
-          console.log(newMessage);
+          newMessage.type = "incomingGify";
           let newMessageString = JSON.stringify(newMessage);
           wss.clients.forEach(function each(client) {
             if (client.readyState === WebSocket.OPEN) {
