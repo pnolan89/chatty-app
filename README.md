@@ -1,45 +1,45 @@
-React Boilerplate
+Chatty
 =====================
 
-A minimal and light dev environment for ReactJS.
+A React-based single-page app that lets multiple clients send messages to each other in a chatroom environment.
 
-### Usage
+### Features
 
-Clone the boilerplate and create your own git repo.
+- Users can send text-based messages to each other
+- Users can update their display names
+- Messages can include images, either by:
+-- Providing links in the message text, or...
+-- Beginning a message with the '/gif' command, followed by some text for the Gify API to search from
+- A display that shows the current number of connected users
 
+### Project Stack
+- Front End: JavaScript, React, HTML, SASS
+- Back End: Node, Express, WS
+
+### Getting Started
+1. Clone the repo to your local machine
+2. In the root folder, run ```npm install``` to install the client server's dependencies.
+3. In the chatty_server folder, run ```npm install``` to install the WebSocket server's dependencies.
+4. In the chatty_server folder, create an .env file. In your .env, enter your Gify API key in the following format:
 ```
-git clone git@github.com:lighthouse-labs/react-simple-boilerplate.git
-cd react-simple-boilerplate
-git remote rm origin
-git remote add origin [YOUR NEW REPOSITORY]
-# Manually update your package.json file
+API_KEY=[YOUR KEY HERE]
 ```
+5. Initialize the servers by running ```npm start``` in both the root and chatty_server directories, and open the app on http://localhost:3000
 
-Install the dependencies and start the server.
-
-```
-npm install
-npm start
-open http://localhost:3000
-```
-
-### Static Files
-
-You can store static files like images, fonts, etc in the `build` folder.
-
-For example, if you copy a file called my_image.png into the build folder you can access it using `http://localhost:3000/build/my_image.png`.
-
-### Linting
-
-This boilerplate project includes React ESLint configuration.
-
-```
-npm run lint
-```
 
 ### Dependencies
+App:
+- React
+- Webpack
+- Babel
+- WS
+- SASS Loader
+- SockJS
+- Style Loader
 
-* React
-* Webpack
-* [babel-loader](https://github.com/babel/babel-loader)
-* [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+WebSocket:
+- Express
+- WS
+- UUID
+- dotenv
+- Request
