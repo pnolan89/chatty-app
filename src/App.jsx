@@ -60,7 +60,7 @@ class App extends Component {
           });
           break;
         case 'clientColor':
-          // Client color changed. Update color
+          // Client color changed, update color
           this.setState({
             currentUser: {
               name: this.state.currentUser.name,
@@ -74,36 +74,14 @@ class App extends Component {
           this.setState({
             messages: messages,
           });
+          this.scrollToBottom();
       }
-
-      // if (message.type === 'clientConnect') {
-      //   this.setState({
-      //     clientCount: message.count
-      //   });
-      // } else if (message.type === 'clientDisconnect') {
-      //   this.setState({
-      //     clientCount: this.state.clientCount - 1
-      //   });
-      // } else if (message.type === 'clientColor') {
-      //   this.setState({
-      //     currentUser: {
-      //       name: this.state.currentUser.name,
-      //       color: message.color
-      //     }
-      //   });
-      // } else {
-      //   let messages = this.state.messages.concat(message);
-      //   this.setState({
-      //     messages: messages,
-      //   });
-      // }
     };
-    this.scrollToBottom();
   }
 
-  componentDidUpdate() {
-    this.scrollToBottom();
-  }
+  // componentDidUpdate() {
+  //   this.scrollToBottom();
+  // }
 
   // 'messagesEnd' div and 'scrollToBottom' method inspired by metakermit on Stack Overflow:
   // (https://stackoverflow.com/questions/37620694/)
