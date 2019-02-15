@@ -21,21 +21,12 @@ const ChatBar = (props) => {
     }
   };
 
-  if (props.currentUser.name === 'Anonymous') {
-    return (
-      <footer className="chatbar">
-          <input onKeyPress={usernameSubmit} name="username" className="chatbar-username" placeholder="Your Name (Optional)" />
-          <input onKeyPress={messageSubmit} name="content" className="chatbar-message" placeholder="Type a message and hit ENTER" />
-      </footer>
-    );
-  } else {
-    return (
-      <footer className="chatbar">
-        <input onKeyPress={usernameSubmit} name="username" className="chatbar-username" defaultValue={props.currentUser.name} />
+  return (
+    <footer className="chatbar">
+        <input onKeyPress={usernameSubmit} name="username" className="chatbar-username" placeholder="Your Name (Optional)" />
         <input onKeyPress={messageSubmit} name="content" className="chatbar-message" placeholder="Type a message and hit ENTER" />
-      </footer>
-    );
-  }
+    </footer>
+  );
 }
 
 export default ChatBar;

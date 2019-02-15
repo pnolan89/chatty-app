@@ -1,30 +1,32 @@
 import React, {Component} from 'react';
 
 const Message = (props) => {
-  let type = props.message.type;
-  let userClass = `message-username ${props.message.color}`;
+  let message = props.message;
+  let type = message.type;
+  let content = message.content;
+  let userClass = `message-username ${message.color}`;
   if (type === 'incomingMessage') {
     return (
       <div className="message">
-        <div className={userClass}>{props.message.username}</div>
-        <div className="message-content">{props.message.content}</div>
+        <div className={userClass}>{message.username}</div>
+        <div className="message-content">{content}</div>
       </div>
     );
   } else if (type === 'incomingNotification') {
     return (
       <div className="message system">
-        {props.message.content}
+        {content}
       </div>
     );
   } else if (type === 'incomingImage') {
-    let images = props.message.images.map((image) =>
+    let images = message.images.map((image) =>
       <img src={image.url} key={image.id}/>
     )
     return (
       <div className="message">
-        <div className={userClass}>{props.message.username}</div>
+        <div className={userClass}>{message.username}</div>
         <div className="message-content">
-          <p>{props.message.content}</p>
+          <p>{content}</p>
           {images}
         </div>
       </div>
