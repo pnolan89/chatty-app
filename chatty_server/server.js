@@ -3,6 +3,7 @@ const WebSocket = require('ws');
 const SocketServer = WebSocket.Server;
 const uuidv4 = require('uuid/v4');
 const dotenv = require('dotenv').config();
+const request = require('request');
 
 const PORT = 3001;
 
@@ -45,14 +46,37 @@ wss.on('connection', (ws) => {
   ws.on('message', (data) => {
     let newMessage = JSON.parse(data);
     newMessage.id = uuidv4();
+    newMessage.sync = true;
     // For postMessage requests
     if (newMessage.type === "postMessage") {
       let contentArray = newMessage.content.split(' ');
       // Check if post contains gif command
       if (contentArray[0] === '/gif') {
-        newMessage.type = "incomingImage";
-        let text = contentArray.splice(1).join(' ');
-
+        newMessage.sync = false;
+        console.log('message type: ', newMessage.type);
+        newMessage.content = contentArray.splice(1).join(' ');
+        const requestOptions = {
+          url: `http://api.giphy.com/v1/gifs/search?api_key=${process.env.API_KEY}&q=${newMessage.content}`,
+          json: true
+        };
+        request(requestOptions, (error, response, gifData) => {
+          if (error) {
+            newMessage.content = error;
+          } else {
+            newMessage.images = [{
+              url: gifData.data[0].images.original.url,
+              id: uuidv4()
+            }];
+          }
+          newMessage.type = "incomingImage";
+          console.log(newMessage);
+          let newMessageString = JSON.stringify(newMessage);
+          wss.clients.forEach(function each(client) {
+            if (client.readyState === WebSocket.OPEN) {
+              client.send(newMessageString);
+            }
+          });
+        });
       }
       // Check if post contains image urls (case-insensitive)
       const checkImgURL = /\.jpg|\.png|\.gif/i;
@@ -82,13 +106,15 @@ wss.on('connection', (ws) => {
       // Create an incomingNotification message for client
       newMessage.type = "incomingNotification";
     }
-    let newMessageString = JSON.stringify(newMessage);
-    // Broadcast the message to all clients
-    wss.clients.forEach(function each(client) {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(newMessageString);
-      }
-    });
+    if (newMessage.sync) {
+      let newMessageString = JSON.stringify(newMessage);
+      // Broadcast the message to all clients
+      wss.clients.forEach(function each(client) {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(newMessageString);
+        }
+      });
+    }
   });
 
   ws.on('close', () => {
