@@ -73,9 +73,6 @@ wss.on('connection', (ws) => {
               }
             });
           }
-          // else {
-          //   console.log('Not found');
-          // }
         });
       }
       // If not /gif command, check if post contains image urls
