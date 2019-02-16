@@ -9,7 +9,7 @@ A single-page app built with React that lets multiple clients send messages to e
 - Users can update their display names
 - Messages can include images, either by:
 -- Providing links in the message text, or...
--- Beginning a message with the '/gif' command, followed by some text for the Gify API to search from
+-- Beginning a message with the '/gif' command, followed by some text for the Giphy API to search from
 - A display that shows the current number of connected users
 
 ### Project Stack
