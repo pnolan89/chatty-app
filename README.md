@@ -1,7 +1,7 @@
 Chatty
 =====================
 
-A React-based single-page app that lets multiple clients send messages to each other in a chatroom environment.
+A single-page app built with React that lets multiple clients send messages to each other in a chatroom environment.
 
 ### Features
 
@@ -28,7 +28,7 @@ API_KEY=[YOUR KEY HERE]
 
 
 ### Dependencies
-App:
+#### App:
 - React
 - Webpack
 - Babel
@@ -37,7 +37,7 @@ App:
 - SockJS
 - Style Loader
 
-WebSocket:
+#### WebSocket:
 - Express
 - WS
 - UUID
