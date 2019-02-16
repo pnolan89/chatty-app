@@ -16,6 +16,9 @@ A single-page app built with React that lets multiple clients send messages to e
 - Front End: JavaScript, React, HTML, SASS
 - Back End: Node, Express, WS
 
+### Screenshots
+![Main App View](https://github.com/pnolan89/chatty-app/blob/master/docs/screenshots/Screen%20Shot%202019-02-15%20at%203.55.06%20PM.png?raw=true)
+
 ### Getting Started
 1. Clone the repo to your local machine
 2. In the root folder, run ```npm install``` to install the client server's dependencies.
@@ -25,7 +28,6 @@ A single-page app built with React that lets multiple clients send messages to e
 API_KEY=[YOUR KEY HERE]
 ```
 5. Initialize the servers by running ```npm start``` in both the root and chatty_server directories, and open the app on http://localhost:3000
-
 
 ### Dependencies
 #### App:
